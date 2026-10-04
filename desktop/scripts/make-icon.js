@@ -1,7 +1,10 @@
 'use strict';
 /**
- * Generates the app icon (no external deps): build/icon.ico (multi-size, PNG entries)
- * and src/assets/icon.png (256px, used for the window).
+ * Generates the app icons (no external deps):
+ * - build/icon.ico: executable/installer (multi-size, PNG entries)
+ * - src/assets/icon.png: window (256px)
+ * - src/assets/tray-on*.png / tray-off*.png: tray (one file per display scale), green when a
+ *   phone is connected, gray otherwise
  * Usage: node scripts/make-icon.js
  */
 const fs = require('node:fs');
@@ -9,10 +12,11 @@ const path = require('node:path');
 const zlib = require('node:zlib');
 
 const SIZES = [16, 20, 24, 32, 40, 48, 64, 128, 256];
+const TRAY_SIZES = [16, 20, 24, 32, 40, 48];
 const SUPERSAMPLE = 8;
 
-const GREEN_TOP = [34, 197, 94];
-const GREEN_BOTTOM = [21, 128, 61];
+const GREEN = { top: [34, 197, 94], bottom: [21, 128, 61] };
+const GRAY = { top: [148, 163, 184], bottom: [100, 116, 139] };
 const WHITE = [255, 255, 255];
 const RED = [239, 68, 68];
 
@@ -50,15 +54,15 @@ function insideRoundedRect(x, y, x0, y0, x1, y1, r) {
   return (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
 }
 
-function colorAt(x, y, size, s) {
+function colorAt(x, y, size, s, bg) {
   if (!insideRoundedRect(x, y, s.margin, s.margin, size - s.margin, size - s.margin, s.radius)) return null;
   if (y >= s.laserTop && y < s.laserBottom && x >= s.laserX0 && x < s.laserX1) return RED;
   if (y >= s.barTop && y < s.barBottom && s.bars.some(([x0, x1]) => x >= x0 && x < x1)) return WHITE;
   const t = y / size;
-  return GREEN_TOP.map((c, i) => c + (GREEN_BOTTOM[i] - c) * t);
+  return bg.top.map((c, i) => c + (bg.bottom[i] - c) * t);
 }
 
-function render(size) {
+function render(size, bg = GREEN) {
   const s = shapeAt(size);
   const rgba = Buffer.alloc(size * size * 4);
   const n = SUPERSAMPLE;
@@ -67,7 +71,7 @@ function render(size) {
       let r = 0, g = 0, b = 0, a = 0;
       for (let sy = 0; sy < n; sy++) {
         for (let sx = 0; sx < n; sx++) {
-          const c = colorAt(px + (sx + 0.5) / n, py + (sy + 0.5) / n, size, s);
+          const c = colorAt(px + (sx + 0.5) / n, py + (sy + 0.5) / n, size, s, bg);
           if (!c) continue;
           r += c[0]; g += c[1]; b += c[2]; a += 1;
         }
@@ -142,9 +146,19 @@ function encodeIco(images) {
 }
 
 const root = path.join(__dirname, '..');
-const images = SIZES.map((size) => ({ size, png: encodePng(size, render(size)) }));
+const assets = path.join(root, 'src', 'assets');
+const renderAll = (sizes, bg) => sizes.map((size) => ({ size, png: encodePng(size, render(size, bg)) }));
+const images = renderAll(SIZES, GREEN);
 fs.mkdirSync(path.join(root, 'build'), { recursive: true });
-fs.mkdirSync(path.join(root, 'src', 'assets'), { recursive: true });
+fs.mkdirSync(assets, { recursive: true });
 fs.writeFileSync(path.join(root, 'build', 'icon.ico'), encodeIco(images));
-fs.writeFileSync(path.join(root, 'src', 'assets', 'icon.png'), images.at(-1).png);
-console.log(`icon.ico (${SIZES.join(', ')}) e src/assets/icon.png gerados`);
+fs.writeFileSync(path.join(assets, 'icon.png'), images.at(-1).png);
+// Tray: one PNG per display scale (tray-on.png, tray-on@1.5x.png…); Electron picks the
+// variant matching the screen DPI, so no resampling blurs the pixel-snapped shapes.
+for (const [name, bg] of [['tray-on', GREEN], ['tray-off', GRAY]]) {
+  for (const { size, png } of renderAll(TRAY_SIZES, bg)) {
+    const scale = size / TRAY_SIZES[0];
+    fs.writeFileSync(path.join(assets, scale === 1 ? `${name}.png` : `${name}@${scale}x.png`), png);
+  }
+}
+console.log('build/icon.ico, src/assets/icon.png e src/assets/tray-*.png gerados');

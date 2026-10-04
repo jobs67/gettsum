@@ -1,0 +1,45 @@
+{
+  "name": "gettsum-desktop",
+  "version": "0.1.0",
+  "description": "Gettsum - recebe leituras de código de barras do celular e insere no campo ativo",
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "npm run build:mobile && electron .",
+    "build:mobile": "npm --prefix ../mobile run build",
+    "test": "node --test test/server.test.js",
+    "test:e2e": "node test/e2e/make-y4m.js test/e2e/ean.y4m && electron test/e2e",
+    "dist": "npm run build:mobile && electron-builder --win"
+  },
+  "build": {
+    "appId": "app.gettsum.desktop",
+    "productName": "Gettsum",
+    "files": [
+      "src/**/*",
+      "mobile-dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false
+    },
+    "asarUnpack": [
+      "node_modules/koffi/**/*"
+    ]
+  },
+  "dependencies": {
+    "koffi": "^3.3.2",
+    "qrcode": "^1.5.4",
+    "selfsigned": "^5.5.0"
+  },
+  "devDependencies": {
+    "electron": "^41.7.1",
+    "electron-builder": "^26.15.3"
+  }
+}

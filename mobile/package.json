@@ -1,0 +1,13 @@
+{
+  "name": "gettsum-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interface móvel do Gettsum (servida pelo computador)",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "barcode-detector": "^3.2.2",
+    "esbuild": "^0.28.2"
+  }
+}

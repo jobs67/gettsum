@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Gettsum">
+  <title>Gettsum</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bar">
+    <div id="conn" class="conn" data-tone="idle" role="status" aria-live="polite">
+      <span class="dot"></span><span id="conn-text">Conectando…</span>
+    </div>
+    <button id="btn-settings" class="icon-btn" aria-label="Configurações" hidden>⚙</button>
+  </header>
+  <p id="offline-help" class="offline-help" hidden>
+    Verifique se o Gettsum está aberto no computador e se este celular está no mesmo Wi-Fi.
+  </p>
+
+  <section id="screen-pair" class="screen center" hidden>
+    <div class="logo" aria-hidden="true"></div>
+    <h1>Conectar ao computador</h1>
+    <p class="muted">Leia o QR Code exibido no Gettsum do computador ou digite o código de 6 números.</p>
+    <p id="pair-busy" class="busy" hidden>Pareando…</p>
+    <form id="pair-form" class="pair-form">
+      <label for="pair-code">Código de pareamento</label>
+      <input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000 000">
+      <button class="primary big" type="submit">Conectar</button>
+    </form>
+    <p id="pair-error" class="error" role="alert"></p>
+  </section>
+
+  <section id="screen-intro" class="screen center" hidden>
+    <div class="logo" aria-hidden="true"></div>
+    <h1>Usar a câmera como leitor</h1>
+    <p class="muted">
+      O Gettsum precisa da câmera para ler códigos de barras. As imagens são processadas
+      <strong>somente neste celular</strong> — apenas o número lido é enviado ao computador.
+    </p>
+    <button id="btn-camera" class="primary big">Ativar câmera</button>
+    <p id="camera-error" class="error" role="alert"></p>
+  </section>
+
+  <section id="screen-scan" class="screen scan" hidden>
+    <div id="viewport" class="viewport" data-phase="idle">
+      <video id="video" playsinline muted></video>
+      <div class="reticle" aria-hidden="true"><span class="laser"></span></div>
+      <p id="hint" class="hint">Aponte para o código de barras</p>
+    </div>
+    <div class="panel">
+      <div id="result" class="result" data-tone="idle" aria-live="polite">
+        <div id="result-value" class="result-value mono">—</div>
+        <div id="result-msg" class="result-msg">Clique no campo do formulário no computador e depois leia o código.</div>
+        <div id="result-actions" class="result-actions"></div>
+      </div>
+      <div class="toolbar">
+        <button id="btn-torch" aria-pressed="false" hidden>🔦 Lanterna</button>
+        <button id="btn-repeat" disabled>↻ Repetir último</button>
+        <button id="btn-pause" aria-pressed="false">⏸ Pausar</button>
+      </div>
+    </div>
+  </section>
+
+  <dialog id="sheet-confirm" class="sheet" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Enviar este valor?</h2>
+    <p id="confirm-value" class="big-value mono"></p>
+    <p class="muted small"><span id="confirm-format"></span> · <span id="confirm-target"></span></p>
+    <div class="stack">
+      <button id="confirm-send" class="primary big">Enviar</button>
+      <button id="confirm-rescan">Ler novamente</button>
+      <button id="confirm-cancel">Cancelar</button>
+    </div>
+  </dialog>
+
+  <dialog id="sheet-settings" class="sheet" aria-labelledby="settings-title">
+    <h2 id="settings-title">Configurações</h2>
+    <label class="field">Nome deste celular <input id="set-name" maxlength="40"></label>
+    <label class="switch"><input type="checkbox" id="set-sound"> Som ao ler</label>
+    <label class="switch"><input type="checkbox" id="set-vibration"> Vibrar ao ler</label>
+    <p id="vibration-note" class="muted small" hidden>Este navegador não permite vibração (iPhone).</p>
+    <label class="switch"><input type="checkbox" id="set-confirm"> Confirmar antes de enviar</label>
+    <fieldset>
+      <legend>Tipos de código</legend>
+      <div id="set-formats" class="formats"></div>
+      <p class="muted small">Ativar menos tipos deixa a leitura mais rápida.</p>
+    </fieldset>
+    <p id="set-info" class="muted small"></p>
+    <div class="stack">
+      <button id="settings-close" class="primary big">Salvar e fechar</button>
+      <button id="settings-unpair" class="danger">Desconectar este celular</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+desktop/mobile-dist/
+desktop/dist/
+desktop/test/e2e/ean.y4m
+desktop/test/e2e/*.log
+desktop/test/e2e/form-out.txt
+desktop/test/e2e/phone.png

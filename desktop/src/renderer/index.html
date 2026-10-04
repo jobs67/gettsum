@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'">
+  <title>Gettsum</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <div>
+        <h1>Gettsum</h1>
+        <p class="subtitle" id="desktop-name">—</p>
+      </div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite">
+      <span class="dot"></span><span id="status-text">Iniciando…</span>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main class="grid">
+    <section class="card pair">
+      <h2>Conectar um celular</h2>
+      <ol class="steps">
+        <li>Conecte o celular <strong>na mesma rede Wi-Fi</strong> deste computador.</li>
+        <li>Aponte a câmera do celular para o QR Code.</li>
+        <li>Se aparecer um aviso de segurança, toque em <em>Avançado → Continuar</em>. Isso ocorre só na primeira vez.</li>
+      </ol>
+      <div class="qr-wrap">
+        <img id="qr" alt="QR Code de pareamento" width="240" height="240">
+        <div id="qr-locked" class="qr-overlay" hidden>Muitas tentativas inválidas.<br>Aguarde alguns segundos…</div>
+      </div>
+      <p class="manual">
+        Ou abra <strong id="url" class="mono">—</strong> no navegador do celular e digite o código
+        <strong id="code" class="code mono">——————</strong>
+      </p>
+      <p class="muted small"><span id="expires">—</span> · <button class="link" id="regen">Gerar novo código</button></p>
+      <label class="field small" id="address-field" hidden>
+        Endereço usado no QR Code
+        <select id="address"></select>
+      </label>
+      <p class="muted small privacy">🔒 Os dados trafegam apenas pela sua rede local, criptografados (HTTPS). Nenhuma imagem da câmera é enviada.</p>
+    </section>
+
+    <div class="col">
+      <section class="card">
+        <h2>Celulares pareados</h2>
+        <ul id="devices" class="devices"></ul>
+        <p id="no-devices" class="muted">Nenhum celular pareado ainda.</p>
+      </section>
+
+      <section class="card">
+        <h2>Inserção</h2>
+        <p id="platform-note" class="note" hidden></p>
+        <label class="field">
+          Como inserir o valor
+          <select id="mode">
+            <option value="type">Digitar no campo ativo (recomendado)</option>
+            <option value="paste">Colar no campo ativo (Ctrl+V)</option>
+            <option value="clipboard">Somente copiar para a área de transferência</option>
+          </select>
+        </label>
+        <label class="field">
+          Depois do valor, pressionar
+          <select id="suffix">
+            <option value="none">Nada (padrão)</option>
+            <option value="tab">Tab — vai para o próximo campo</option>
+            <option value="enter">Enter — pode enviar o formulário</option>
+          </select>
+        </label>
+        <label class="switch"><input type="checkbox" id="paused"> Pausar recepção</label>
+      </section>
+
+      <section class="card">
+        <h2>Preferências</h2>
+        <label class="field">
+          Nome deste computador
+          <input id="desktopName" maxlength="40" placeholder="">
+        </label>
+        <label class="switch"><input type="checkbox" id="maskValues"> Ocultar valores no histórico</label>
+        <label class="switch"><input type="checkbox" id="launchAtLogin"> Iniciar com o Windows</label>
+        <label class="switch"><input type="checkbox" id="closeToTray"> Ao fechar, manter na bandeja</label>
+        <label class="field small">
+          Porta de rede
+          <input id="port" type="number" min="1024" max="65535">
+        </label>
+      </section>
+    </div>
+
+    <section class="card wide">
+      <div class="row">
+        <h2>Últimas leituras <span class="muted small">(apenas nesta sessão, não são salvas)</span></h2>
+        <button class="link" id="clear-history">Limpar</button>
+      </div>
+      <table class="history">
+        <thead><tr><th>Hora</th><th>Celular</th><th>Valor</th><th>Resultado</th></tr></thead>
+        <tbody id="history"></tbody>
+      </table>
+      <p id="no-history" class="muted">Nenhuma leitura ainda. Clique no campo do formulário e leia um código com o celular.</p>
+    </section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

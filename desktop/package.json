@@ -7,6 +7,7 @@
   "scripts": {
     "start": "npm run build:mobile && electron .",
     "build:mobile": "npm --prefix ../mobile run build",
+    "icon": "node scripts/make-icon.js",
     "test": "node --test test/server.test.js",
     "test:e2e": "node test/e2e/make-y4m.js test/e2e/ean.y4m && electron test/e2e",
     "dist": "npm run build:mobile && electron-builder --win"
@@ -23,11 +24,14 @@
       "target": [
         "nsis",
         "portable"
-      ]
+      ],
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
-      "perMachine": false
+      "perMachine": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
     },
     "asarUnpack": [
       "node_modules/koffi/**/*"

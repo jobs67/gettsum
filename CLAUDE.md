@@ -29,6 +29,7 @@ Não use `node --test test/` — pegaria os arquivos de `test/e2e`.
 - `desktop/src/injector/` — `windows.js` usa koffi → Win32 `SendInput` com `KEYEVENTF_UNICODE` e detecção de UIPI; `index.js` escolhe modo (type/paste/clipboard) e cai para a área de transferência quando não dá para digitar.
 - `desktop/src/renderer/` — UI do PC (HTML/CSS/JS puros, `contextIsolation` + `preload.js`).
 - `mobile/src/` — JS puro empacotado por esbuild (IIFE). `scanner.js` usa `BarcodeDetector` nativo ou o ponyfill `barcode-detector` + `zxing-wasm`; o `.wasm` é servido localmente.
+- `desktop/scripts/make-icon.js` — gera `build/icon.ico` (exe/instalador) e `src/assets/icon.png` (janela) sem dependências; rode `npm run icon` após mudar o desenho e versione os arquivos gerados. O ícone da bandeja é desenhado em `main.js` (`makeIcon`), verde/cinza conforme o status.
 - `desktop/test/e2e/` — simulador de celular em Electron com câmera falsa (Y4M gerado com EAN-13) + formulário WinForms (`test-form.ps1`).
 
 ## Convenções e cuidados
@@ -43,4 +44,4 @@ Não use `node --test test/` — pegaria os arquivos de `test/e2e`.
 - Electron não suporta `prompt()`; usar edição inline.
 - koffi precisa ficar em `asarUnpack` no electron-builder.
 - O E2E digita na janela em primeiro plano; testes deixam dados em `%APPDATA%\gettsum-desktop\` e `%APPDATA%\phone-sim` — limpar depois.
-- Ainda não validado em celulares reais (aviso de certificado, Safari iOS, lanterna). Executável sem assinatura e com ícone padrão do Electron.
+- Ainda não validado em celulares reais (aviso de certificado, Safari iOS, lanterna). Executável sem assinatura digital.

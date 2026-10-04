@@ -147,6 +147,11 @@ cd desktop
 npm run dist       # gera dist/Gettsum Setup x.y.z.exe (instalador) e dist/Gettsum x.y.z.exe (portátil)
 ```
 
+O ícone do executável, do instalador e da janela vem de `desktop/build/icon.ico` e
+`desktop/src/assets/icon.png`, gerados por `npm run icon` (`scripts/make-icon.js`, sem
+dependências). Os arquivos gerados são versionados; só é preciso rodar o comando ao alterar o
+desenho.
+
 O executável não é assinado digitalmente. Sem assinatura de código, o Windows SmartScreen
 mostra um aviso na primeira execução.
 

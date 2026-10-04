@@ -175,7 +175,7 @@ function createWindow() {
     minWidth: 720,
     minHeight: 560,
     title: 'Gettsum',
-    icon: makeIcon(64, ICON_ON),
+    icon: path.join(__dirname, 'assets', 'icon.png'),
     autoHideMenuBar: true,
     backgroundColor: '#0f172a',
     webPreferences: {

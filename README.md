@@ -8,6 +8,9 @@ cursor, como se tivesse sido digitado.
 - **Celular:** nada para instalar. Basta ler um QR Code; a interface abre no navegador (Android/Chrome, iPhone/Safari).
 - **Rede:** somente local, com criptografia (HTTPS). Nenhuma imagem da câmera sai do celular.
 
+📖 **Manual do usuário completo** (instalação, pareamento, uso diário, configurações por
+situação, mensagens de erro e solução de problemas): **[docs/MANUAL.md](docs/MANUAL.md)**.
+
 Arquitetura, alternativas avaliadas, limitações e escopo: [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
 
 ```
@@ -23,12 +26,17 @@ gettsum/
 │  ├─ src/renderer/      Interface do computador
 │  └─ test/              Testes de integração e E2E (simulador de celular)
 ├─ mobile/               Interface do celular (compilada para desktop/mobile-dist)
-└─ docs/ARQUITETURA.md
+└─ docs/
+   ├─ MANUAL.md          Manual do usuário
+   └─ ARQUITETURA.md     Decisões técnicas, limitações e escopo
 ```
 
 ---
 
-## Uso (usuário final)
+## Guia rápido
+
+Resumo para começar. Detalhes, receitas por tipo de tarefa e solução de problemas estão no
+[manual](docs/MANUAL.md).
 
 1. Abra o **Gettsum** no computador. Na primeira vez, o Windows pergunta se o app pode usar a
    rede: marque **Redes privadas** e clique em **Permitir**.
@@ -60,6 +68,17 @@ e digite o código de 6 dígitos.
 
 Tipos de código: EAN-13, EAN-8, UPC-A, UPC-E e Code 128 (ativos por padrão); QR Code,
 Code 39, ITF e Data Matrix (opcionais).
+
+### Configurações recomendadas
+
+| Tarefa | Como inserir | Tecla após o valor |
+|---|---|---|
+| Lista de códigos no Excel/Planilhas | Digitar | Enter |
+| Formulário com vários campos | Digitar | Tab |
+| Acesso remoto, Citrix, sistemas legados | Colar (Ctrl+V) | conforme o sistema |
+| Prefere colar manualmente | Somente copiar | — |
+
+Mais combinações estão em [Configurações recomendadas por situação](docs/MANUAL.md#7-configurações-recomendadas-por-situação).
 
 ### Quando a conexão cai
 

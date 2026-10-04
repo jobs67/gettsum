@@ -2,7 +2,11 @@
 
 Gettsum: o celular lê código de barras pela câmera (página web servida pelo próprio PC) e envia
 só o texto, via HTTPS na rede local, para um app Electron no Windows que o digita no campo em
-foco. Visão de uso e API: [README.md](README.md). Decisões e limitações: [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+foco. Visão de uso e API: [README.md](README.md). Manual do usuário: [docs/MANUAL.md](docs/MANUAL.md).
+Decisões e limitações: [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+
+Ao mudar textos de UI, opções, padrões ou mensagens de erro, atualize também `docs/MANUAL.md`
+(seções 5–9 citam os textos literalmente) e a tabela de configurações do README.
 
 ## Comandos
 
